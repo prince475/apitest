@@ -1,4 +1,4 @@
- import axios from 'axios';
+import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 
 function ApiConsumer() {
@@ -13,17 +13,25 @@ function ApiConsumer() {
     }
   };
 
-  const saveAuthToken = (token) => {
+
+    const saveAuthToken = (token) => {
+    // Save the token to localStorage with the key 'jwtToken'
     localStorage.setItem('jwtToken', token);
-    setAuthToken(token); // Set the token in Axios headers
+    // Set the token in Axios headers
+    setAuthToken(token);
   };
 
+  const jwtToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTY0MTU0MDcsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NzE0OCIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NzE0OCJ9.2xvHHqpW8tSeXT5zRue3cPJYplb50ywh7a02dnHjQ34';
+saveAuthToken(jwtToken);
+
   useEffect(() => {
-    const token = localStorage.getItem('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTYzMTg5MzUsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NzE0OCIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NzE0OCJ9.fUwKkLzWKx_e1IZz_1_PbbNwL_15E5AOJNpRpYmrS1M');
+    // Retrieve the token from localStorage using the correct key 'jwtToken'
+      const token = localStorage.getItem('jwtToken');
+      
     if (token) {
       setAuthToken(token); // Set the token in Axios headers
       // Make your API request here
-      axios.get('https://developer.britam.com/api/IdeasPortal/GetChallenges')
+      axios.post('https://developer.britam.com/api/IdeasPortal/GetIdeas')
       .then((response) => {
         setData(response.data);
         setLoading(false);
@@ -45,7 +53,14 @@ function ApiConsumer() {
       <h1>API Data:</h1>
       <ul>
         {data.map((item) => (
-          <li key={item.id}>{item.title}</li>
+            <li key={item.id}>
+            <strong>Title:</strong> {item.title}<br />
+            <strong>Potential benefits:</strong> {item.potential_BENEFIT}<br />
+            <strong>Description:</strong> {item.description} <br />
+            <strong>Department:</strong> {item.department} <br />
+            <strong>Upvotes:</strong> {item.upvotes} <br />
+            <strong>Comments:</strong> {item.comments} <br />
+          </li>
         ))}
       </ul>
     </div>
